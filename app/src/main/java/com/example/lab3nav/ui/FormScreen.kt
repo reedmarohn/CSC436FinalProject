@@ -20,9 +20,12 @@ package com.example.lab3nav.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -37,10 +40,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.Image
 import com.example.lab3nav.R
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 
@@ -105,7 +110,7 @@ fun FormScreen(model : InventoryViewModel,
         Button(
             onClick =
                 {
-                  initiateScanning(scanner, onScannerExit, model)
+                  initiateScanning(scanner, onScannerExit)
                     },
             enabled = true
         ){
@@ -156,14 +161,44 @@ fun initiateScanning(
     model : InventoryViewModel
 ){
         scanner.startScan().addOnSuccessListener{
-            barcode ->
-                model.uiState.value.productName = barcode.displayValue.toString()
-                onExit()
+            barcode -> //make API call here
+             model.uiState.value.Barcode = barcode.displayValue.toString()
         }
         .addOnCanceledListener{
             onExit()
         }
-        .addOnFailureListener{e -> }
+        .addOnFailureListener{e ->  onExit() }
+}
+@Composable
+fun ResultScreen(marsUiState: Any, modifier: Any) {
+
 }
 
+@Composable
+fun scanItem(barcode: String, itemUiState: ItemUiState) {
+    when (itemUiState) {
+                is ItemUiState.Loading -> LoadingScreen(modifier)
+                is ItemUiState.Success -> ResultScreen(marsUiState, modifier)
+                else -> {//go back to the form screen
+                }
 
+}
+
+@Composable
+fun LoadingScreen(barcode : String, itemUiState: ItemUiState ,modifier: Modifier = Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize()
+    ) {
+        Image(
+            modifier = Modifier.size(200.dp),
+            painter = painterResource(R.drawable.loading_img),
+            contentDescription = stringResource(R.string.Loading)
+        )
+    }
+}
+
+@Composable
+fun ResultScreen(marsUiState: Any, modifier: Modifier) {
+
+}

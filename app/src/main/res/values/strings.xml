@@ -13,5 +13,6 @@
     <string name="Cancel">Cancel</string>
     <string name="Submit">Submit</string>
     <string name="Scan">Scan Barcode</string>
+    <string name="Loading">Loading...</string>
 
 </resources>

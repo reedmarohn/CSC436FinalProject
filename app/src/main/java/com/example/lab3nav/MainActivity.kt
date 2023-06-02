@@ -19,8 +19,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun setupScanner() : GmsBarcodeScanner {
-        
-
         return GmsBarcodeScanning.getClient(this)
     }
 }
