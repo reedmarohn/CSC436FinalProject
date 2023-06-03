@@ -49,6 +49,7 @@ import androidx.compose.foundation.Image
 import com.example.lab3nav.R
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 
+
 @Composable
 fun FormScreen(model : InventoryViewModel,
                scanner : GmsBarcodeScanner,
@@ -105,17 +106,23 @@ fun FormScreen(model : InventoryViewModel,
                     ),
                     value = quantity,
                     onValueChanged = { quantity = it },
-                    modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(bottom = 32.dp)
+                        .fillMaxWidth(),
         )
         Button(
             onClick =
                 {
-                  initiateScanning(scanner, onScannerExit)
+                  initiateScanning(scanner, onScannerExit, model)
+                    if(model.uiState.value.Barcode != ""){
+                        scanItem(model)
+                    }
                     },
             enabled = true
         ){
             Text(stringResource(R.string.Scan))
         }
+
         Button(
             onClick =
             {
@@ -160,32 +167,31 @@ fun initiateScanning(
     onExit : () -> Unit,
     model : InventoryViewModel
 ){
+    model.uiState.value.Barcode = "077341125112" //only for debugging purposes DELETE
+    return //delete
         scanner.startScan().addOnSuccessListener{
-            barcode -> //make API call here
-             model.uiState.value.Barcode = barcode.displayValue.toString()
+            barcode -> //Set the scanned barcode value here so we can look it up after this
+            // model.uiState.value.Barcode = barcode.displayValue.toString()
         }
         .addOnCanceledListener{
             onExit()
         }
         .addOnFailureListener{e ->  onExit() }
-}
-@Composable
-fun ResultScreen(marsUiState: Any, modifier: Any) {
 
 }
+fun scanItem(model : InventoryViewModel) {
 
-@Composable
-fun scanItem(barcode: String, itemUiState: ItemUiState) {
-    when (itemUiState) {
-                is ItemUiState.Loading -> LoadingScreen(modifier)
-                is ItemUiState.Success -> ResultScreen(marsUiState, modifier)
-                else -> {//go back to the form screen
-                }
+    when (model.itemUiState) {
+        //is ItemUiState.Loading -> LoadingScreen(modifier)
+        is ItemUiState.Success -> model.uiState.value.productName = "Success"
+        else -> {//go back to the form screen
+            model.uiState.value.productName = "Failure"
+        }
 
+    }
 }
-
 @Composable
-fun LoadingScreen(barcode : String, itemUiState: ItemUiState ,modifier: Modifier = Modifier) {
+fun LoadingScreen(modifier: Modifier) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
@@ -198,7 +204,13 @@ fun LoadingScreen(barcode : String, itemUiState: ItemUiState ,modifier: Modifier
     }
 }
 
-@Composable
-fun ResultScreen(marsUiState: Any, modifier: Modifier) {
 
+@Composable
+fun ResultScreen(itemUiState : String, modifier: Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize()
+    ) {
+        Text(itemUiState)
+    }
 }

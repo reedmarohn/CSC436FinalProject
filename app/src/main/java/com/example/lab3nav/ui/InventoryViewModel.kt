@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface ItemUiState {
-    data class Success(val photos: String) : ItemUiState
+    data class Success(val products: String) : ItemUiState
     object Error : ItemUiState
     object Loading : ItemUiState
 }
@@ -60,11 +60,12 @@ var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
         productList.add(_uiState.value)
     }
 
-    fun getItemPhotos() {
+    fun getBarcodeProducts() {
         viewModelScope.launch {
         itemUiState = try {
-               val listResult = ItemAPI.retrofitService.getPhotos()
-               ItemUiState.Success(listResult)
+               val listResult = ItemAPI.retrofitService.getProducts()
+               ItemUiState.Success("Success: ${listResult} photos retrieved")
+
            } catch (e: IOException) {
               ItemUiState.Error
            }

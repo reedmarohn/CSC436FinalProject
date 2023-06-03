@@ -1,10 +1,17 @@
+package com.example.lab3nav.data
+
+import com.example.lab3nav.network.BarcodeAPI
+import com.example.lab3nav.network.Item
+import com.example.lab3nav.network.Products
+
 interface InventoryRepository {
-    suspend fun getItemCategory() : String
-    suspend fun getItemName() : String
-    suspend fun getImages() : List<InventoryImage>
+    suspend fun getBarcodeProducts() : Products
 }
 
-class DefaultInventoryRepository: InventoryRepository{
-    override suspend fun getItemCategory() : String{
-       return BarcodeAPI.getPhotos()}
+class DefaultInventoryRepository(
+    private val apiService : BarcodeAPI
+): InventoryRepository{
+    override suspend fun getBarcodeProducts(): Products {
+        return apiService.getProducts()
+    }
 }
