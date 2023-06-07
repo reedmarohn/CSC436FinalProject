@@ -19,6 +19,7 @@ package com.example.lab3nav.ui
  */
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,8 +46,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.Image
 import com.example.lab3nav.R
+import com.example.lab3nav.network.Products
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 
 
@@ -58,6 +59,7 @@ fun FormScreen(model : InventoryViewModel,
                onScannerExit: () -> Unit = {},
                modifier: Modifier = Modifier
 ) { var productName by rememberSaveable { mutableStateOf(model.uiState.value.productName) }
+    var productCategory by rememberSaveable { mutableStateOf(model.uiState.value.productCategory)}
     var expirationDate by rememberSaveable { mutableStateOf(model.uiState.value.expirationDate) }
     var quantity by rememberSaveable { mutableStateOf(model.uiState.value.quantity.toString()) }
 
@@ -82,6 +84,18 @@ fun FormScreen(model : InventoryViewModel,
             ),
             value = productName,
             onValueChanged = { productName = it },
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .fillMaxWidth(),
+        )
+        EditNumberField(
+            label = R.string.Product_Category,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            ),
+            value = productCategory,
+            onValueChanged = { productCategory = it },
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth(),
@@ -114,9 +128,9 @@ fun FormScreen(model : InventoryViewModel,
             onClick =
                 {
                   initiateScanning(scanner, onScannerExit, model)
-                    if(model.uiState.value.Barcode != ""){
-                        scanItem(model)
-                    }
+//                    if(model.uiState.value.Barcode != ""){
+//                        scanItem(model)
+//                    }
                     },
             enabled = true
         ){
@@ -167,11 +181,31 @@ fun initiateScanning(
     onExit : () -> Unit,
     model : InventoryViewModel
 ){
-    model.uiState.value.Barcode = "077341125112" //only for debugging purposes DELETE
-    return //delete
+   //only for debugging purposes DELETE
+       model.setBarcode("077341125112")
+                   model.getBarcodeProducts()
+                     when (model.itemUiState) {
+                           //is ItemUiState.Loading -> LoadingScreen(modifier)
+                           is ItemUiState.Success -> setFromBarcode((model.itemUiState as ItemUiState.Success).products, model)
+                           else -> {//go back to the form screen
+                               model.uiState.value.productName = "Failure"
+                           }
+                       }
+       return //delete
+
         scanner.startScan().addOnSuccessListener{
             barcode -> //Set the scanned barcode value here so we can look it up after this
-            // model.uiState.value.Barcode = barcode.displayValue.toString()
+            model.setBarcode(barcode.displayValue.toString())
+            model.getBarcodeProducts()
+
+              when (model.itemUiState) {
+                    //is ItemUiState.Loading -> LoadingScreen(modifier)
+                    is ItemUiState.Success -> setFromBarcode((model.itemUiState as ItemUiState.Success).products, model)
+                    else -> {//go back to the form screen
+                        model.uiState.value.productName = "Failure"
+                    }
+                }
+                onExit()
         }
         .addOnCanceledListener{
             onExit()
@@ -179,17 +213,13 @@ fun initiateScanning(
         .addOnFailureListener{e ->  onExit() }
 
 }
-fun scanItem(model : InventoryViewModel) {
 
-    when (model.itemUiState) {
-        //is ItemUiState.Loading -> LoadingScreen(modifier)
-        is ItemUiState.Success -> model.uiState.value.productName = "Success"
-        else -> {//go back to the form screen
-            model.uiState.value.productName = "Failure"
-        }
-
-    }
+fun setFromBarcode(product : Products, model : InventoryViewModel){
+    model.uiState.value.productName = product.title
+    model.uiState.value.imageURL = product.images
+    model.uiState.value.productCategory = product.category
 }
+
 @Composable
 fun LoadingScreen(modifier: Modifier) {
     Box(

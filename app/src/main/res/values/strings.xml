@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">Lab3Nav</string>
+    <string name="app_name">ForgetIt</string>
     <string name="StartScreen">Start</string>
     <string name="FillForm">Form</string>
     <string name="ListView">ListView</string>
     <string name="back_button">Back</string>
-     <string name="Food">Food</string>
-        <string name="Personal">Personal Care</string>
+    <string name="add_product">Add Product</string>
     <string name="Product_Name">Product Name</string>
     <string name="Product_Expiration">Expiration Date (MM/DD/YYYY)</string>
     <string name="Product_Category">Category</string>

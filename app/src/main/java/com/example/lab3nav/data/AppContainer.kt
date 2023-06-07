@@ -9,11 +9,10 @@ import retrofit2.Retrofit
 
 interface AppContainer{
     val inventoryRepository : InventoryRepository
+  //  val inventoryDBRepository : InventoryDBRepository
 }
 class DefaultAppContainer : AppContainer{
-    val barcode = "077341125112"
-    val apiKey = "&formatted=y&key=9eqhwipfg1n6vy92hjbf98eyxd66u7"
-
+  //  val barcode = "077341125112"
     var BASE_URL = "https://api.barcodelookup.com"
     @OptIn(ExperimentalSerializationApi::class)
     private val retrofit = Retrofit.Builder()
@@ -28,9 +27,10 @@ class DefaultAppContainer : AppContainer{
         DefaultInventoryRepository(retrofitService)
     }
 
+//    override val inventoryDBRepository : InventoryDBRepository by lazy{
+//        OfflineInventoryRepository(InventoryDatabase.getDatabase(context).itemDao())
+//    }
 
 }
-//override val InventoryRepository : InventoryDBRepository by lazy{
-//    OfflineInventoryRepository(InventoryDatabase.getDatabase(context).itemDao())
-//}
+
 

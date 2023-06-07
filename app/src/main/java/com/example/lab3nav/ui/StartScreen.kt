@@ -26,7 +26,7 @@ import com.example.lab3nav.data.DataSource
 @Composable
 fun StartScreen(
     buttonOptions: List<Int>,
-    onNextButtonClicked: (Int) -> Unit,
+    onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ){
  Column(
@@ -59,11 +59,11 @@ fun StartScreen(
                     dimensionResource(id = R.dimen.padding_medium)
                 )
             ) {
-                buttonOptions.forEach { item ->
+                buttonOptions.forEach{
+                    item ->
                     SelectButton(
-                        labelResourceId = item,
-                        onClick = { onNextButtonClicked(item) }
-                    )
+                    labelResourceId = item,
+                    onClick = { onNextButtonClicked })
                 }
             }
         }
@@ -71,9 +71,10 @@ fun StartScreen(
 }
 
 @Composable
-fun SelectButton(@StringRes labelResourceId: Int,
-                 onClick: () -> Unit,
-                 modifier: Modifier = Modifier) {
+fun SelectButton(
+    @StringRes labelResourceId: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier) {
       Button(
             onClick = onClick,
             modifier = modifier.widthIn(min = 250.dp)

@@ -102,7 +102,6 @@ fun InventoryApp(
                 StartScreen(
                     buttonOptions = DataSource.buttonOptions,
                     onNextButtonClicked = {
-                        viewModel.setCategory(it)
                         navController.navigate(InventoryScreen.Form.name)
                     },
                     modifier = Modifier

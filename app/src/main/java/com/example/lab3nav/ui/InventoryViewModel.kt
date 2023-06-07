@@ -4,9 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.lab3nav.InventoryApplication
+import com.example.lab3nav.data.InventoryRepository
 import com.example.lab3nav.data.InventoryUiState
-import com.example.lab3nav.network.ItemAPI
+import com.example.lab3nav.network.Products
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,13 +20,13 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface ItemUiState {
-    data class Success(val products: String) : ItemUiState
+    data class Success(val products: Products) : ItemUiState
     object Error : ItemUiState
     object Loading : ItemUiState
 }
 
 
-class InventoryViewModel : ViewModel() {
+class InventoryViewModel(private val inventoryRepository : InventoryRepository) : ViewModel() {
 var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
   private set
 
@@ -42,7 +47,7 @@ var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
         }
     }
 
-    fun setCategory(category : Int){
+    fun setCategory(category : String){
         _uiState.update{state -> state.copy(productCategory = category)
         }
     }
@@ -50,6 +55,10 @@ var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
     fun setExpiration(expirationDate : String){
         _uiState.update{state -> state.copy(expirationDate = expirationDate)
         }
+    }
+
+    fun setBarcode(barcode : String){
+        _uiState.update{state -> state.copy(Barcode = barcode)}
     }
 
     fun resetProduct(){
@@ -63,12 +72,20 @@ var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
     fun getBarcodeProducts() {
         viewModelScope.launch {
         itemUiState = try {
-               val listResult = ItemAPI.retrofitService.getProducts()
-               ItemUiState.Success("Success: ${listResult} photos retrieved")
-
+               ItemUiState.Success(inventoryRepository.getBarcodeProducts(_uiState.value.Barcode))
            } catch (e: IOException) {
               ItemUiState.Error
            }
+        }
+    }
+
+    companion object{
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as InventoryApplication)
+                val inventoryRepository = application.container.inventoryRepository
+                InventoryViewModel(inventoryRepository = inventoryRepository)
+            }
         }
     }
 }

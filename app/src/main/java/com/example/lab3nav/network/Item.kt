@@ -12,6 +12,6 @@ data class Item(
 @Serializable
 data class Products (
     val category: String,
-    val images: String
-    )
-
+    val images: String,
+    val title: String
+)
