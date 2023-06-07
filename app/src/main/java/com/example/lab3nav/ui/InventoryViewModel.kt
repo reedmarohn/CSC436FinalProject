@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -29,6 +30,10 @@ sealed interface ItemUiState {
 class InventoryViewModel(private val inventoryRepository : InventoryRepository) : ViewModel() {
 var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
   private set
+
+    init{
+        getBarcodeProducts()
+    }
 
     private val _uiState = MutableStateFlow(InventoryUiState())
     val uiState: StateFlow<InventoryUiState> = _uiState.asStateFlow()
@@ -82,7 +87,7 @@ var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
     companion object{
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as InventoryApplication)
+                val application = (this[APPLICATION_KEY] as InventoryApplication)
                 val inventoryRepository = application.container.inventoryRepository
                 InventoryViewModel(inventoryRepository = inventoryRepository)
             }

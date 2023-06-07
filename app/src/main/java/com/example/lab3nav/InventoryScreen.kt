@@ -28,7 +28,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.lab3nav.data.DataSource
 import com.example.lab3nav.ui.FormScreen
 import com.example.lab3nav.ui.InventoryViewModel
 import com.example.lab3nav.ui.ListScreen
@@ -100,7 +99,6 @@ fun InventoryApp(
         /************START***********/
             composable(route = InventoryScreen.Start.name) {
                 StartScreen(
-                    buttonOptions = DataSource.buttonOptions,
                     onNextButtonClicked = {
                         navController.navigate(InventoryScreen.Form.name)
                     },

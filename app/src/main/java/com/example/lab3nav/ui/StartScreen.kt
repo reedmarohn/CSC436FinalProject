@@ -21,11 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lab3nav.R
-import com.example.lab3nav.data.DataSource
+
 
 @Composable
 fun StartScreen(
-    buttonOptions: List<Int>,
     onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -59,36 +58,35 @@ fun StartScreen(
                     dimensionResource(id = R.dimen.padding_medium)
                 )
             ) {
-                buttonOptions.forEach{
-                    item ->
-                    SelectButton(
-                    labelResourceId = item,
-                    onClick = { onNextButtonClicked })
+                Button(
+                    onClick = onNextButtonClicked,
+                    modifier = modifier.widthIn(min = 250.dp)
+                ) {
+                    Text(text = stringResource(R.string.add_product))
                 }
             }
         }
     }
 }
 
-@Composable
-fun SelectButton(
-    @StringRes labelResourceId: Int,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier) {
-      Button(
-            onClick = onClick,
-            modifier = modifier.widthIn(min = 250.dp)
-        ) {
-            Text(stringResource(labelResourceId))
-        }
-
-}
+//@Composable
+//fun SelectButton(
+//    @StringRes labelResourceId: Int,
+//    onClick: () -> Unit,
+//    modifier: Modifier = Modifier) {
+//      Button(
+//            onClick = onClick,
+//            modifier = modifier.widthIn(min = 250.dp)
+//        ) {
+//            Text(stringResource(labelResourceId))
+//        }
+//
+//}
 
 @Preview
 @Composable
 fun StartPreview(){
     StartScreen(
-        buttonOptions = DataSource.buttonOptions,
         onNextButtonClicked = {},
         modifier = Modifier.fillMaxSize().padding(dimensionResource(R.dimen.padding_medium))
     )
