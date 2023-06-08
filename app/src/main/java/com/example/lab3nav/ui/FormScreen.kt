@@ -214,51 +214,25 @@ fun DatePickerField(
     )
 }
 
+
 fun initiateScanning(
     scanner : GmsBarcodeScanner,
     onExit : () -> Unit,
     model : InventoryViewModel
 ){
    //only for debugging purposes DELETE
-    model.setBarcode("077341125112")
-    model.getBarcodeProducts(onExit)
-        onExit()
+//    model.setBarcode("077341125112")
+//    model.getBarcodeProducts(onExit)
+//        onExit()
+        scanner.startScan().addOnSuccessListener{
+            barcode -> //Set the scanned barcode value here so we can look it up after this
+            model.setBarcode(barcode.displayValue.toString())
+            model.getBarcodeProducts(onExit)
+    onExit()
+        }
+        .addOnCanceledListener{
+            onExit()
+        }
+        .addOnFailureListener{e ->  onExit() }
 
-//        scanner.startScan().addOnSuccessListener{
-//            barcode -> //Set the scanned barcode value here so we can look it up after this
-//            //model.setBarcode(barcode.displayValue.toString())
-//            model.getBarcodeProducts()
-//
-//        }
-//        .addOnCanceledListener{
-//            onExit()
-//        }
-//        .addOnFailureListener{e ->  onExit() }
-
-}
-
-
-@Composable
-fun LoadingScreen(modifier: Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize()
-    ) {
-        Image(
-            modifier = Modifier.size(200.dp),
-            painter = painterResource(R.drawable.loading_img),
-            contentDescription = stringResource(R.string.Loading)
-        )
-    }
-}
-
-
-@Composable
-fun ResultScreen(itemUiState : String, modifier: Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize()
-    ) {
-        Text(itemUiState)
-    }
 }
