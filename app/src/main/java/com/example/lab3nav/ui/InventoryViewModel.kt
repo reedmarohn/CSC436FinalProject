@@ -1,5 +1,8 @@
 package com.example.lab3nav.ui
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -21,7 +24,9 @@ class InventoryViewModel(private val inventoryRepository : InventoryRepository) 
     private val _uiState = MutableStateFlow(InventoryUiState())
     val uiState: StateFlow<InventoryUiState> = _uiState.asStateFlow()
 
-    val productList = mutableListOf<InventoryUiState>()
+    //var productList = mutableListOf<InventoryUiState>()
+    // needed change for dynamically updating the list
+    var productList by mutableStateOf(listOf<InventoryUiState>())
 
     fun setQuantity(amount : Int){
         _uiState.update{state ->
@@ -58,7 +63,11 @@ class InventoryViewModel(private val inventoryRepository : InventoryRepository) 
     }
 
     fun saveProduct(){
-        productList.add(_uiState.value)
+        productList = productList + _uiState.value
+        //productList.add(_uiState.value)
+    }
+    fun removeItem(item : InventoryUiState) {
+        productList = productList.filter { it != item }.toMutableList()!!
     }
 
     fun getBarcodeProducts(onDone : () -> Unit) {

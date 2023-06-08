@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,9 +15,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,18 +40,17 @@ import com.example.lab3nav.data.InventoryUiState
 
 @Composable
 fun ListScreen(
-    prodList : List<InventoryUiState>,
-    onDoneButtonClicked : () -> Unit = {},
-    modifier : Modifier = Modifier
+    model : InventoryViewModel,
+    onDoneButtonClicked : () -> Unit = {}
 ) {
     Column(modifier = Modifier.fillMaxSize()){
         LazyColumn(
             Modifier.weight(1f),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            contentPadding = PaddingValues(horizontal = 9.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(prodList) { data ->
-                CreateCard(data = data)
+            items(model.productList) { data ->
+                CreateCard(data = data, model = model)
             }
         }
         Button(onClick = onDoneButtonClicked, enabled = true) {
@@ -56,14 +60,16 @@ fun ListScreen(
 }
 
 @Composable
-fun CreateCard(data: InventoryUiState) {
+fun CreateCard(data : InventoryUiState, model : InventoryViewModel) {
         Card(
-            shape = RoundedCornerShape(size = 12.dp),
+            shape = RoundedCornerShape(size = 6.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            modifier = Modifier.padding(10.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(2.dp)
+                .fillMaxWidth()
         ) {
             Row(
-                modifier = Modifier.padding(all = 12.dp),
+                modifier = Modifier.padding(all = 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -71,15 +77,23 @@ fun CreateCard(data: InventoryUiState) {
                 if(imageURL == ""){
                     imageURL = "https://cdn-icons-png.flaticon.com/128/4689/4689733.png"
                 }
-                AsyncImage(
-                    model = imageURL,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(width = 8.dp)) // gap between image and text
+                Column {
+                    AsyncImage(
+                        model = imageURL,
+                        modifier = Modifier
+                            .size(76.dp)
+                            .clip(CircleShape),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                    IconButton(
+                        onClick = {
+                            model.removeItem(data)
+                        }) {
+                        Icon(Icons.Rounded.Delete, contentDescription = "for deleting an item")
+                    }
+                }
+                Spacer(modifier = Modifier.width(width = 4.dp)) // gap between image and text
                 Text(buildAnnotatedString {
                     //use this to add multiple lines of data in one Text call
                     withStyle(style = ParagraphStyle(lineHeight = 30.sp) ) {
@@ -103,3 +117,4 @@ fun CreateCard(data: InventoryUiState) {
             } // end of row
         }// end of card
 }
+

@@ -131,11 +131,10 @@ fun InventoryApp(
             /***********LIST************/
             composable(route = InventoryScreen.List.name) {
                             ListScreen(
-                                prodList = viewModel.productList,
+                                model = viewModel,
                                 onDoneButtonClicked = {
                                     navController.navigate(InventoryScreen.Start.name)
-                                },
-                                modifier = Modifier.fillMaxHeight()
+                                }
                             )
                         }
         }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
@@ -83,9 +84,11 @@ fun StartScreen(
 @Composable
 fun SummarizedView(viewModel: InventoryViewModel){
     if(viewModel.productList.isNotEmpty()) {
-        Column(){
+        Column(modifier = Modifier
+            .padding(1.dp).fillMaxWidth()
+            ){
             viewModel.productList.subList(0, min(4, viewModel.productList.size)).forEach{ product ->
-                CreateCard(product)
+                CreateCard(product, viewModel)
             }
         }
     }
