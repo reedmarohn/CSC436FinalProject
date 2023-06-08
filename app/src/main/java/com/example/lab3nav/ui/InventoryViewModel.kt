@@ -1,8 +1,5 @@
 package com.example.lab3nav.ui
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -12,23 +9,14 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.lab3nav.InventoryApplication
 import com.example.lab3nav.data.InventoryRepository
 import com.example.lab3nav.data.InventoryUiState
-import com.example.lab3nav.network.Item
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-sealed interface ItemUiState {
-    data class Success(val products: Item) : ItemUiState
-    object Error : ItemUiState
-    object Loading : ItemUiState
-}
-
 
 class InventoryViewModel(private val inventoryRepository : InventoryRepository) : ViewModel() {
-var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
-  private set
 
     private val _uiState = MutableStateFlow(InventoryUiState())
     val uiState: StateFlow<InventoryUiState> = _uiState.asStateFlow()

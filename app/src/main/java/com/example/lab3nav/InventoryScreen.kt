@@ -97,6 +97,7 @@ fun InventoryApp(
         /************START***********/
             composable(route = InventoryScreen.Start.name) {
                 StartScreen(
+                    viewModel = viewModel,
                     onNextButtonClicked = {
                         navController.navigate(InventoryScreen.Form.name)
                     },
