@@ -212,9 +212,7 @@ fun DatePickerField(
         ),
         enabled = false
     )
-
 }
-
 
 fun initiateScanning(
     scanner : GmsBarcodeScanner,
