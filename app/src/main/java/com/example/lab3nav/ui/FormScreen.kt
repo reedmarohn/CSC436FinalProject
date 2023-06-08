@@ -18,8 +18,11 @@ package com.example.lab3nav.ui
  * limitations under the License.
  */
 
+import android.app.DatePickerDialog
+import android.widget.DatePicker
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,13 +37,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -48,6 +55,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.lab3nav.R
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
+import java.util.Calendar
 
 
 @Composable
@@ -99,17 +107,13 @@ fun FormScreen(model : InventoryViewModel,
                 .padding(bottom = 32.dp)
                 .fillMaxWidth(),
         )
-        EditNumberField(
+        DatePickerField(
             label = R.string.Product_Expiration,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
             value = expirationDate,
-            onValueChanged = { expirationDate = it },
+            onValueChanged = {expirationDate = it},
             modifier = Modifier
                 .padding(bottom = 32.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
         )
         EditNumberField(
                     label = R.string.Product_Quantity,
@@ -172,6 +176,48 @@ fun EditNumberField(
     )
 }
 
+@Composable
+fun DatePickerField(
+    @StringRes label: Int,
+    value: String,
+    onValueChanged: (String) -> Unit,
+    modifier: Modifier = Modifier
+){
+
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+
+    var selectedDateText by remember { mutableStateOf("") }
+
+// Fetching current year, month and day
+    val year = calendar[Calendar.YEAR]
+    val month = calendar[Calendar.MONTH]
+    val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
+
+    val datePicker = DatePickerDialog(
+        context,
+        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
+            selectedDateText = "${selectedMonth + 1}/$selectedDayOfMonth/$selectedYear"
+        }, year, month, dayOfMonth
+    )
+
+
+    TextField(
+        value = selectedDateText.ifEmpty { value },
+        singleLine = true,
+        modifier = modifier.clickable { datePicker.show() },
+        onValueChange = onValueChanged,
+        label = { Text(stringResource(label))},
+        colors = TextFieldDefaults.textFieldColors(
+            disabledTextColor = Color.Black,
+            disabledLabelColor = Color.DarkGray,
+        ),
+        enabled = false
+    )
+
+}
+
+
 fun initiateScanning(
     scanner : GmsBarcodeScanner,
     onExit : () -> Unit,
@@ -186,14 +232,7 @@ fun initiateScanning(
 //            barcode -> //Set the scanned barcode value here so we can look it up after this
 //            //model.setBarcode(barcode.displayValue.toString())
 //            model.getBarcodeProducts()
-//              when (model.itemUiState) {
-//                    //is ItemUiState.Loading -> LoadingScreen(modifier)
-//                    is ItemUiState.Success -> setFromBarcode((model.itemUiState as ItemUiState.Success).products, model)
-//                    else -> {//go back to the form screen
-//                        model.uiState.value.productName = "Failure"
-//                        onExit()
-//                    }
-//                }
+//
 //        }
 //        .addOnCanceledListener{
 //            onExit()
