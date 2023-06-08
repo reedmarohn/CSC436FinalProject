@@ -1,5 +1,4 @@
 package com.example.lab3nav.network
-
 import kotlinx.serialization.Serializable
 
 
