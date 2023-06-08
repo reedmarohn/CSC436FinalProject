@@ -6,12 +6,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
-//Json.nonstrict.parse()
-//or
-//.addConverterFactory(
-//    Json(
-//        JsonConfiguration(strictMode = false)
-//    ).asConverterFactory(MediaType.get("application/json"))
 
 interface AppContainer{
     val inventoryRepository : InventoryRepository

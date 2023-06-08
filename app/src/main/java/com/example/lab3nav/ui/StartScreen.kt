@@ -18,11 +18,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.lab3nav.R
-import java.text.SimpleDateFormat
 import kotlin.math.min
 
 
@@ -85,39 +83,11 @@ fun StartScreen(
 @Composable
 fun SummarizedView(viewModel: InventoryViewModel){
     if(viewModel.productList.isNotEmpty()) {
-        var sortedProducts = viewModel.productList
-        sortedProducts.sortBy { product ->
-            SimpleDateFormat("mm/dd/yyyy").parse(product.expirationDate)
-        }
         Column(){
-            sortedProducts.subList(0, min(4, sortedProducts.size)).forEach{ product ->
+            viewModel.productList.subList(0, min(4, viewModel.productList.size)).forEach{ product ->
                 CreateCard(product)
             }
         }
     }
 }
-
-//@Composable
-//fun SelectButton(
-//    @StringRes labelResourceId: Int,
-//    onClick: () -> Unit,
-//    modifier: Modifier = Modifier) {
-//      Button(
-//            onClick = onClick,
-//            modifier = modifier.widthIn(min = 250.dp)
-//        ) {
-//            Text(stringResource(labelResourceId))
-//        }
-//
-//}
-
-//@Preview
-//@Composable
-//fun StartPreview(){
-//    StartScreen(
-//        onNextButtonClicked = {},
-//        modifier = Modifier.fillMaxSize().padding(dimensionResource(R.dimen.padding_medium))
-//    )
-//}
-
 

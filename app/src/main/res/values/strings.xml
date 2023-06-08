@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">ForgetIt</string>
+    <string name="app_name">iExpire</string>
     <string name="StartScreen">Start</string>
     <string name="FillForm">Form</string>
-    <string name="ListView">ListView</string>
+    <string name="ListView">List</string>
     <string name="back_button">Back</string>
     <string name="list_all">View List</string>
     <string name="Product_Name">Product Name</string>

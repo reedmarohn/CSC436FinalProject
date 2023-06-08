@@ -59,7 +59,6 @@ fun FormScreen(model : InventoryViewModel,
                modifier: Modifier = Modifier
 ) { var productName by remember { mutableStateOf(model.uiState.value.productName) }
     var productCategory by remember { mutableStateOf(model.uiState.value.productCategory)}
-    var expirationDate by remember { mutableStateOf(model.uiState.value.expirationDate) }
     var quantity by remember { mutableStateOf(model.uiState.value.quantity.toString()) }
 
     Column(
@@ -207,19 +206,19 @@ fun initiateScanning(
     model : InventoryViewModel
 ){
    //only for debugging purposes DELETE
-    model.setBarcode("077341125112")
-    model.getBarcodeProducts(onExit)
-        onExit()
+//    model.setBarcode("077341125112")
+//    model.getBarcodeProducts(onExit)
+//        onExit()
 
-//        scanner.startScan().addOnSuccessListener{
-//            barcode -> //Set the scanned barcode value here so we can look it up after this
-//            model.setBarcode(barcode.displayValue.toString())
-//            model.getBarcodeProducts(onExit)
-//            onExit
-//        }
-//        .addOnCanceledListener{
-//            onExit()
-//        }
-//        .addOnFailureListener{e ->  onExit() }
+        scanner.startScan().addOnSuccessListener{
+            barcode -> //Set the scanned barcode value here so we can look it up after this
+            model.setBarcode(barcode.displayValue.toString())
+            model.getBarcodeProducts(onExit)
+            onExit
+        }
+        .addOnCanceledListener{
+            onExit()
+        }
+        .addOnFailureListener{e ->  onExit() }
 
 }
