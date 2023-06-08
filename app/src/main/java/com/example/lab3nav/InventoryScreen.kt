@@ -98,9 +98,13 @@ fun InventoryApp(
             composable(route = InventoryScreen.Start.name) {
                 StartScreen(
                     viewModel = viewModel,
-                    onNextButtonClicked = {
+                    onNewItemClicked = {
                         navController.navigate(InventoryScreen.Form.name)
                     },
+                    onViewAllClicked = {
+                        navController.navigate((InventoryScreen.List.name))
+                    }
+                    ,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(dimensionResource(R.dimen.padding_medium))

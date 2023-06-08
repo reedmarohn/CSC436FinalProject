@@ -12,6 +12,9 @@
     <string name="Cancel">Cancel</string>
     <string name="Submit">Submit</string>
     <string name="Scan">Scan Barcode</string>
-    <string name="Loading">Loading...</string>
+    <string name="New_Item">New Item</string>
+    <string name="View_All_Items">View All Items</string>
+    <string name="Image">https://cdn-icons-png.flaticon.com/128/4689/4689733.png</string>
+
 
 </resources>

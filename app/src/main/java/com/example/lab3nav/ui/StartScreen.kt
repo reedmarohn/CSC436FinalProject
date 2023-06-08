@@ -7,16 +7,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.lab3nav.R
 import java.text.SimpleDateFormat
 import kotlin.math.min
@@ -25,7 +29,8 @@ import kotlin.math.min
 @Composable
 fun StartScreen(
     viewModel: InventoryViewModel,
-    onNextButtonClicked: () -> Unit,
+    onNewItemClicked: () -> Unit,
+    onViewAllClicked: () -> Unit,
     modifier: Modifier = Modifier
 ){
  Column(
@@ -38,11 +43,14 @@ fun StartScreen(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ) {
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
-           // Image(
-           //     painter = painterResource(R.drawable.cupcake),
-           //     contentDescription = null,
-           //     modifier = Modifier.width(300.dp)
-           // )
+            AsyncImage(
+                model = stringResource(R.string.Image),
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
             Text(
                 text = stringResource(R.string.app_name),
@@ -60,9 +68,14 @@ fun StartScreen(
                 )
             ) {
                 Button(
-                    onClick = onNextButtonClicked
+                    onClick = onNewItemClicked
                 ) {
-                    Text(text = stringResource(R.string.list_all))
+                    Text(stringResource(R.string.New_Item))
+                }
+                Button(
+                    onClick = onViewAllClicked
+                ) {
+                    Text(stringResource(R.string.View_All_Items))
                 }
             }
         }
