@@ -32,10 +32,7 @@ Column(Modifier.fillMaxSize()) {
                             Text(text = "Done")}
                     }
         }
-}
-
-
-
+    }
 }
 
 @Composable

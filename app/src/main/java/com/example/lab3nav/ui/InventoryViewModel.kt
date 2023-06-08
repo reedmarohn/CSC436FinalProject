@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 sealed interface ItemUiState {
     data class Success(val products: Item) : ItemUiState
@@ -74,14 +73,17 @@ var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
         productList.add(_uiState.value)
     }
 
-    fun getBarcodeProducts() {
+    fun getBarcodeProducts(onDone : () -> Unit) {
         viewModelScope.launch {
-        itemUiState = try {
-               ItemUiState.Success(inventoryRepository.getBarcodeProducts(_uiState.value.Barcode))
-           } catch (e: IOException) {
-              ItemUiState.Error
-           }
-
+            try {
+                val result = inventoryRepository.getBarcodeProducts(_uiState.value.Barcode)
+                //check result
+                setProductName(result.products[0].title)
+                setCategory(result.products[0].category)
+                onDone()
+            } catch(e : Error){
+            
+            }
         }
     }
 

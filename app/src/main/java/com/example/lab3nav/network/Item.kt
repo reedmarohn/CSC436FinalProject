@@ -11,7 +11,7 @@ data class Item(
 
 @Serializable
 data class Products (
-   //val category: String,
+   val category: String,
    //val images: List<String>,
     val title: String
 )
