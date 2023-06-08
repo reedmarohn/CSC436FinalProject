@@ -76,7 +76,7 @@ fun SummarizedView(viewModel: InventoryViewModel){
         }
         Column(){
             sortedProducts.subList(0, min(4, sortedProducts.size)).forEach{ product ->
-                createCard(product)
+                CreateCard(product)
             }
         }
     }
