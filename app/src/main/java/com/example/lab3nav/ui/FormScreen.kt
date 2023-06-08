@@ -37,7 +37,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +44,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -108,7 +106,6 @@ fun FormScreen(model : InventoryViewModel,
         )
         DatePickerField(
             label = R.string.Product_Expiration,
-            value = expirationDate,
             viewModel = model,
             onValueChanged = {},
             modifier = Modifier
@@ -179,7 +176,6 @@ fun EditNumberField(
 @Composable
 fun DatePickerField(
     @StringRes label: Int,
-    value: String,
     onValueChanged: (String) -> Unit,
     viewModel: InventoryViewModel,
     modifier: Modifier = Modifier
@@ -206,10 +202,6 @@ fun DatePickerField(
         modifier = modifier.clickable { datePicker.show() },
         onValueChange = onValueChanged,
         label = { Text(stringResource(label))},
-        colors = TextFieldDefaults.textFieldColors(
-            disabledTextColor = Color.DarkGray,
-            disabledLabelColor = Color.DarkGray
-        ),
         enabled = false
     )
 }
@@ -226,9 +218,9 @@ fun initiateScanning(
 
 //        scanner.startScan().addOnSuccessListener{
 //            barcode -> //Set the scanned barcode value here so we can look it up after this
-//            //model.setBarcode(barcode.displayValue.toString())
-//            model.getBarcodeProducts()
-//
+//            model.setBarcode(barcode.displayValue.toString())
+//            model.getBarcodeProducts(onExit)
+//            onExit
 //        }
 //        .addOnCanceledListener{
 //            onExit()
