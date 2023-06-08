@@ -41,6 +41,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -108,7 +109,8 @@ fun FormScreen(model : InventoryViewModel,
         )
         DatePickerField(
             label = R.string.Product_Expiration,
-            viewModel = model,
+            value = expirationDate,
+            onValueChanged = {expirationDate = it},
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
@@ -129,6 +131,7 @@ fun FormScreen(model : InventoryViewModel,
             onClick =
                 {
                   initiateScanning(scanner, onScannerExit, model)
+
                 },
             enabled = true
         ){
@@ -139,6 +142,8 @@ fun FormScreen(model : InventoryViewModel,
             onClick =
             {
                 model.setProductName(productName)
+                model.setCategory(productCategory)
+                model.setExpiration(expirationDate)
                 model.setQuantity(quantity.toInt())
                 onNextButtonClicked()
             },
@@ -176,14 +181,15 @@ fun EditNumberField(
 @Composable
 fun DatePickerField(
     @StringRes label: Int,
-    viewModel: InventoryViewModel,
+    value: String,
+    onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ){
 
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
-    var selectedDateText by rememberSaveable { mutableStateOf("") }
+    var selectedDateText by remember { mutableStateOf("") }
 
 // Fetching current year, month and day
     val year = calendar[Calendar.YEAR]
@@ -194,21 +200,16 @@ fun DatePickerField(
         context,
         { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
             selectedDateText = "${selectedMonth + 1}/$selectedDayOfMonth/$selectedYear"
-            viewModel.setExpiration(selectedDateText)
         }, year, month, dayOfMonth
     )
 
 
     TextField(
-        value = selectedDateText,
+        value = selectedDateText.ifEmpty { value },
         singleLine = true,
         modifier = modifier.clickable { datePicker.show() },
-        onValueChange = { viewModel.setExpiration(selectedDateText) },
+        onValueChange = onValueChanged,
         label = { Text(stringResource(label))},
-        colors = TextFieldDefaults.textFieldColors(
-            disabledTextColor = Color.Black,
-            disabledLabelColor = Color.DarkGray,
-        ),
         enabled = false
     )
 
