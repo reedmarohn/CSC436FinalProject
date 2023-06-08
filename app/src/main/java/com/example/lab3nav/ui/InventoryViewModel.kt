@@ -30,10 +30,6 @@ class InventoryViewModel(private val inventoryRepository : InventoryRepository) 
 var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
   private set
 
-//    init{
-//        getBarcodeProducts()
-//    }
-
     private val _uiState = MutableStateFlow(InventoryUiState())
     val uiState: StateFlow<InventoryUiState> = _uiState.asStateFlow()
 
@@ -81,7 +77,7 @@ var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
         viewModelScope.launch {
             try {
                 val result = inventoryRepository.getBarcodeProducts(_uiState.value.Barcode)
-                //check result
+                //check result?
                 setProductName(result.products[0].title)
                 setCategory(result.products[0].category)
                 setURL(result.products[0].images[0])

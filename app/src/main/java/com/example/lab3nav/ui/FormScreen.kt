@@ -131,6 +131,7 @@ fun FormScreen(model : InventoryViewModel,
             onClick =
                 {
                   initiateScanning(scanner, onScannerExit, model)
+
                 },
             enabled = true
         ){
@@ -141,6 +142,7 @@ fun FormScreen(model : InventoryViewModel,
             onClick =
             {
                 model.setProductName(productName)
+                model.setCategory(productCategory)
                 model.setExpiration(expirationDate)
                 model.setQuantity(quantity.toInt())
                 onNextButtonClicked()
@@ -208,10 +210,6 @@ fun DatePickerField(
         modifier = modifier.clickable { datePicker.show() },
         onValueChange = onValueChanged,
         label = { Text(stringResource(label))},
-        colors = TextFieldDefaults.textFieldColors(
-            disabledTextColor = Color.Black,
-            disabledLabelColor = Color.DarkGray,
-        ),
         enabled = false
     )
 

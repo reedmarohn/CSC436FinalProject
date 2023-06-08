@@ -30,9 +30,12 @@ import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.lab3nav.R
 import com.example.lab3nav.data.InventoryUiState
 
@@ -49,39 +52,44 @@ fun ListScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(prodList) { data ->
-                createCard(data = data)
+                CreateCard(data = data)
             }
         }
         Button(onClick = onDoneButtonClicked, enabled = true) {
-            Text(text = "Done")
+            Text(text = "+")
         }
     }
 }
 @Composable
-fun createCard(data: InventoryUiState) {
+fun CreateCard(data: InventoryUiState) {
         Card(
             shape = RoundedCornerShape(size = 12.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.padding(10.dp).fillMaxWidth()
         ) {
             Row(
                 modifier = Modifier.padding(all = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                Image(
+                var imageURL = data.imageURL
+                if(imageURL == ""){
+                    imageURL = "https://cdn-icons-png.flaticon.com/128/4689/4689733.png"
+                }
+                AsyncImage(
+                    model = imageURL,
                     modifier = Modifier
-                        .size(62.dp)
+                        .size(80.dp)
                         .clip(CircleShape),
-                    painter = painterResource(R.drawable.fashion),
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
+
                 Spacer(modifier = Modifier.width(width = 8.dp)) // gap between image and text
 
                 Text(buildAnnotatedString {
                     //use this to add multiple lines of data in one Text call
-                    withStyle(style = ParagraphStyle(lineHeight = 30.sp)) {
+                    withStyle(style = ParagraphStyle(lineHeight = 30.sp) ) {
                         // NAME
                         withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
                             append("Product Name: ")
@@ -104,4 +112,15 @@ fun createCard(data: InventoryUiState) {
             } // end of row
         }// end of card
 }
-
+//@Preview
+//@Composable
+//fun imagePreview(){
+//    AsyncImage(
+//        model = "https://cdn-icons-png.flaticon.com/128/4689/4689733.png",
+//        modifier = Modifier
+//            .size(80.dp)
+//            .clip(CircleShape),
+//        contentDescription = null,
+//        contentScale = ContentScale.Crop
+//    )
+//}
