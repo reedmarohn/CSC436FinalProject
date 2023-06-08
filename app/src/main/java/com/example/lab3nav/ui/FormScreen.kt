@@ -47,7 +47,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.lab3nav.R
-import com.example.lab3nav.network.Products
+import com.example.lab3nav.network.Item
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 
 
@@ -128,10 +128,29 @@ fun FormScreen(model : InventoryViewModel,
             onClick =
                 {
                   initiateScanning(scanner, onScannerExit, model)
-//                    if(model.uiState.value.Barcode != ""){
-//                        scanItem(model)
-//                    }
-                    },
+                    if(!model.uiState.value.Barcode.equals("")){
+//                        when (model.itemUiState) {
+//                        is ItemUiState.Loading -> LoadingScreen(modifier)
+//                        is ItemUiState.Success -> setFromBarcode((model.itemUiState as ItemUiState.Success).products, model)
+//                        else -> {//go back to the form screen
+//                                 model.uiState.value.productName = "Failure"
+//                                            }
+//                                        }
+
+    while(model.itemUiState.equals(ItemUiState.Loading)){
+                        //continue looping for as long as it is loading
+                            if(model.itemUiState.equals(ItemUiState.Success::class)) {
+                                //success call
+                                setFromBarcode(
+                                    (model.itemUiState as ItemUiState.Success).products,
+                                    model
+                                )
+                            }else if(model.itemUiState.equals(ItemUiState.Error)){
+                                break
+                            }
+                         }
+                    }
+                },
             enabled = true
         ){
             Text(stringResource(R.string.Scan))
@@ -184,40 +203,33 @@ fun initiateScanning(
    //only for debugging purposes DELETE
        model.setBarcode("077341125112")
                    model.getBarcodeProducts()
-                     when (model.itemUiState) {
-                           //is ItemUiState.Loading -> LoadingScreen(modifier)
-                           is ItemUiState.Success -> setFromBarcode((model.itemUiState as ItemUiState.Success).products, model)
-                           else -> {//go back to the form screen
-                               model.uiState.value.productName = "Failure"
-                           }
-                       }
-       return //delete
 
-        scanner.startScan().addOnSuccessListener{
-            barcode -> //Set the scanned barcode value here so we can look it up after this
-            model.setBarcode(barcode.displayValue.toString())
-            model.getBarcodeProducts()
+        onExit()
 
-              when (model.itemUiState) {
-                    //is ItemUiState.Loading -> LoadingScreen(modifier)
-                    is ItemUiState.Success -> setFromBarcode((model.itemUiState as ItemUiState.Success).products, model)
-                    else -> {//go back to the form screen
-                        model.uiState.value.productName = "Failure"
-                    }
-                }
-                onExit()
-        }
-        .addOnCanceledListener{
-            onExit()
-        }
-        .addOnFailureListener{e ->  onExit() }
+//        scanner.startScan().addOnSuccessListener{
+//            barcode -> //Set the scanned barcode value here so we can look it up after this
+//            //model.setBarcode(barcode.displayValue.toString())
+//            model.getBarcodeProducts()
+//              when (model.itemUiState) {
+//                    //is ItemUiState.Loading -> LoadingScreen(modifier)
+//                    is ItemUiState.Success -> setFromBarcode((model.itemUiState as ItemUiState.Success).products, model)
+//                    else -> {//go back to the form screen
+//                        model.uiState.value.productName = "Failure"
+//                        onExit()
+//                    }
+//                }
+//        }
+//        .addOnCanceledListener{
+//            onExit()
+//        }
+//        .addOnFailureListener{e ->  onExit() }
 
 }
 
-fun setFromBarcode(product : Products, model : InventoryViewModel){
-    model.uiState.value.productName = product.title
-    model.uiState.value.imageURL = product.images
-    model.uiState.value.productCategory = product.category
+fun setFromBarcode(product : Item, model : InventoryViewModel){
+    model.uiState.value.productName = product.products[0].title
+   //model.uiState.value.imageURL = product.products[0].images[0]
+   //model.uiState.value.productCategory = product.products[0].category
 }
 
 @Composable

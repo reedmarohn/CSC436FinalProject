@@ -12,7 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.lab3nav.InventoryApplication
 import com.example.lab3nav.data.InventoryRepository
 import com.example.lab3nav.data.InventoryUiState
-import com.example.lab3nav.network.Products
+import com.example.lab3nav.network.Item
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface ItemUiState {
-    data class Success(val products: Products) : ItemUiState
+    data class Success(val products: Item) : ItemUiState
     object Error : ItemUiState
     object Loading : ItemUiState
 }
@@ -31,9 +31,9 @@ class InventoryViewModel(private val inventoryRepository : InventoryRepository) 
 var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
   private set
 
-    init{
-        getBarcodeProducts()
-    }
+//    init{
+//        getBarcodeProducts()
+//    }
 
     private val _uiState = MutableStateFlow(InventoryUiState())
     val uiState: StateFlow<InventoryUiState> = _uiState.asStateFlow()
@@ -81,6 +81,7 @@ var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
            } catch (e: IOException) {
               ItemUiState.Error
            }
+
         }
     }
 

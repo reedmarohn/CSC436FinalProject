@@ -6,17 +6,23 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+//Json.nonstrict.parse()
+//or
+//.addConverterFactory(
+//    Json(
+//        JsonConfiguration(strictMode = false)
+//    ).asConverterFactory(MediaType.get("application/json"))
 
 interface AppContainer{
     val inventoryRepository : InventoryRepository
   //  val inventoryDBRepository : InventoryDBRepository
 }
 class DefaultAppContainer : AppContainer{
-  //  val barcode = "077341125112"
+
     var BASE_URL = "https://api.barcodelookup.com"
     @OptIn(ExperimentalSerializationApi::class)
     private val retrofit = Retrofit.Builder()
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(Json{ignoreUnknownKeys = true}.asConverterFactory("application/json".toMediaType()))
         .baseUrl(BASE_URL)
         .build()
     val retrofitService : BarcodeAPI by lazy {
