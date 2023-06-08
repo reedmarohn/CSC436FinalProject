@@ -37,11 +37,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -109,7 +109,8 @@ fun FormScreen(model : InventoryViewModel,
         DatePickerField(
             label = R.string.Product_Expiration,
             value = expirationDate,
-            onValueChanged = {expirationDate = it},
+            viewModel = model,
+            onValueChanged = {},
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
@@ -141,7 +142,6 @@ fun FormScreen(model : InventoryViewModel,
             {
                 model.setProductName(productName)
                 model.setCategory(productCategory)
-                model.setExpiration(expirationDate)
                 model.setQuantity(quantity.toInt())
                 onNextButtonClicked()
             },
@@ -181,6 +181,7 @@ fun DatePickerField(
     @StringRes label: Int,
     value: String,
     onValueChanged: (String) -> Unit,
+    viewModel: InventoryViewModel,
     modifier: Modifier = Modifier
 ){
 
@@ -196,14 +197,19 @@ fun DatePickerField(
         context,
         { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
             selectedDateText = "${selectedMonth + 1}/$selectedDayOfMonth/$selectedYear"
+            viewModel.setExpiration(selectedDateText)
         }, year, month, dayOfMonth
     )
     TextField(
-        value = selectedDateText.ifEmpty { value },
+        value = selectedDateText,
         singleLine = true,
         modifier = modifier.clickable { datePicker.show() },
         onValueChange = onValueChanged,
         label = { Text(stringResource(label))},
+        colors = TextFieldDefaults.textFieldColors(
+            disabledTextColor = Color.DarkGray,
+            disabledLabelColor = Color.DarkGray
+        ),
         enabled = false
     )
 
