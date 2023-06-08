@@ -61,6 +61,10 @@ var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
         }
     }
 
+    fun setURL(urlString : String){
+        _uiState.update{state -> state.copy(imageURL = urlString)}
+    }
+
     fun setBarcode(barcode : String){
         _uiState.update{state -> state.copy(Barcode = barcode)}
     }
@@ -80,9 +84,10 @@ var itemUiState: ItemUiState by mutableStateOf(ItemUiState.Loading)
                 //check result
                 setProductName(result.products[0].title)
                 setCategory(result.products[0].category)
+                setURL(result.products[0].images[0])
                 onDone()
             } catch(e : Error){
-            
+
             }
         }
     }
