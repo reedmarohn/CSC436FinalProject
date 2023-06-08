@@ -54,15 +54,13 @@ fun ListScreen(
             items(prodList) { data ->
                 CreateCard(data = data)
             }
-
         }
         Button(onClick = onDoneButtonClicked, enabled = true) {
-            Text(text = "+")
+            Text(text = "Done")
         }
     }
-
-
 }
+
 @Composable
 fun CreateCard(data: InventoryUiState) {
         Card(
@@ -87,9 +85,7 @@ fun CreateCard(data: InventoryUiState) {
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
-
                 Spacer(modifier = Modifier.width(width = 8.dp)) // gap between image and text
-
                 Text(buildAnnotatedString {
                     //use this to add multiple lines of data in one Text call
                     withStyle(style = ParagraphStyle(lineHeight = 30.sp) ) {
@@ -98,13 +94,11 @@ fun CreateCard(data: InventoryUiState) {
                             append("Product Name: ")
                         }
                         append(text = data.productName)
-
                         //CATEGORY
                         withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
                             append("\nProduct Category: ")
                         }
                         append(text = data.productCategory)
-
                         //EXPIRATION
                         withStyle(style = SpanStyle( fontWeight = FontWeight.SemiBold)) {
                             append("\nExpiration Date: ")

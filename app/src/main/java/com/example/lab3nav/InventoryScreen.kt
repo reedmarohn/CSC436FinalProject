@@ -34,7 +34,6 @@ import com.example.lab3nav.ui.ListScreen
 import com.example.lab3nav.ui.StartScreen
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 
-
 enum class InventoryScreen(@StringRes val title: Int) {
         Start(title = R.string.app_name),
         Form(title = R.string.FillForm),
@@ -90,7 +89,6 @@ fun InventoryApp(
         }
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
-
         NavHost(
             navController = navController,
             startDestination = InventoryScreen.Start.name,
@@ -114,6 +112,7 @@ fun InventoryApp(
                     scanner = scanner,
                     onNextButtonClicked = {
                         viewModel.saveProduct()
+                        viewModel.resetProduct()
                         navController.navigate(InventoryScreen.List.name) },
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(viewModel, navController)
@@ -129,13 +128,11 @@ fun InventoryApp(
                             ListScreen(
                                 prodList = viewModel.productList,
                                 onDoneButtonClicked = {
-                                     viewModel.resetProduct()
-                                    navController.navigate(InventoryScreen.Form.name)
+                                    navController.navigate(InventoryScreen.Start.name)
                                 },
                                 modifier = Modifier.fillMaxHeight()
                             )
                         }
-
         }
     }
 }

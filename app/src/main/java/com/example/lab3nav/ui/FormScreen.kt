@@ -37,7 +37,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,10 +64,10 @@ fun FormScreen(model : InventoryViewModel,
                onCancelButtonClicked: () -> Unit = {},
                onScannerExit: () -> Unit = {},
                modifier: Modifier = Modifier
-) { var productName by rememberSaveable { mutableStateOf(model.uiState.value.productName) }
-    var productCategory by rememberSaveable { mutableStateOf(model.uiState.value.productCategory)}
-    var expirationDate by rememberSaveable { mutableStateOf(model.uiState.value.expirationDate) }
-    var quantity by rememberSaveable { mutableStateOf(model.uiState.value.quantity.toString()) }
+) { var productName by remember { mutableStateOf(model.uiState.value.productName) }
+    var productCategory by remember { mutableStateOf(model.uiState.value.productCategory)}
+    var expirationDate by remember { mutableStateOf(model.uiState.value.expirationDate) }
+    var quantity by remember { mutableStateOf(model.uiState.value.quantity.toString()) }
 
     Column(
         modifier = Modifier
@@ -131,7 +130,6 @@ fun FormScreen(model : InventoryViewModel,
             onClick =
                 {
                   initiateScanning(scanner, onScannerExit, model)
-
                 },
             enabled = true
         ){
@@ -188,9 +186,7 @@ fun DatePickerField(
 
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
-
     var selectedDateText by remember { mutableStateOf("") }
-
 // Fetching current year, month and day
     val year = calendar[Calendar.YEAR]
     val month = calendar[Calendar.MONTH]
@@ -202,8 +198,6 @@ fun DatePickerField(
             selectedDateText = "${selectedMonth + 1}/$selectedDayOfMonth/$selectedYear"
         }, year, month, dayOfMonth
     )
-
-
     TextField(
         value = selectedDateText.ifEmpty { value },
         singleLine = true,
@@ -222,8 +216,8 @@ fun initiateScanning(
     model : InventoryViewModel
 ){
    //only for debugging purposes DELETE
-       model.setBarcode("077341125112")
-        model.getBarcodeProducts(onExit)
+    model.setBarcode("077341125112")
+    model.getBarcodeProducts(onExit)
         onExit()
 
 //        scanner.startScan().addOnSuccessListener{
