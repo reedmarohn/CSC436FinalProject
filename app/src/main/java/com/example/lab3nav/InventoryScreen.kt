@@ -129,7 +129,8 @@ fun InventoryApp(
                             ListScreen(
                                 prodList = viewModel.productList,
                                 onDoneButtonClicked = {
-                                     cancelOrderAndNavigateToStart(viewModel, navController)
+                                     viewModel.resetProduct()
+                                    navController.navigate(InventoryScreen.Form.name)
                                 },
                                 modifier = Modifier.fillMaxHeight()
                             )
