@@ -2,7 +2,6 @@ package com.example.lab3nav.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -42,7 +41,6 @@ fun ListScreen(
     onDoneButtonClicked : () -> Unit = {},
     modifier : Modifier = Modifier
 ) {
-    Box{
         Column(modifier = Modifier.fillMaxSize()){
             LazyColumn(
                 Modifier.weight(1f),
@@ -53,12 +51,10 @@ fun ListScreen(
                     createCard(data = data)
                 }
             }
-
+            Button(onClick = onDoneButtonClicked, enabled = true, shape = CircleShape) {
+                Text(text = "+")
+            }
         }
-        Button(onClick = onDoneButtonClicked, enabled = true, shape = CircleShape, modifier = Modifier.align(Alignment.BottomEnd)) {
-            Text(text = "+")
-        }
-    }
 
 
 }
