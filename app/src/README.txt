@@ -32,3 +32,6 @@ Changes made since the midterm report:
 
   We didn't get to complete:
     - Firebase integration to store our products locally
+    - Form field validation (invalid or null fields entered)
+    - Error checking in case the API doesn't return a background
+    - Alerts/Notifications when things are close to expiring
